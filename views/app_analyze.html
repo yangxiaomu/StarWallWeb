@@ -1,0 +1,151 @@
+<% include common/head.html %>
+<script type="text/javascript" src="/javascripts/app_analyze.js"></script>
+<div class="container-fluid top_line">
+  <div class="row-fluid">
+    <div class="offset1 tabbable tabs-left">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#firstchart" data-toggle="tab" >APP数量分析</a></li>
+        <li><a href="#hero-ar" data-toggle="tab" onclick="reloadOsTy()">分设备类型报告</a></li>
+        <li><a href="#hero-ba" data-toggle="tab" onclick="reloadAppTy()">分应用类型报告</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="firstchart"  >
+          <div>
+            <div class="form-inline">
+              <div class="form-group" style="float: left">
+                <label class="sr-only" for="startdateNum"></label>
+                <input type="date" class="form-control" id="startdateNum" placeholder="Choose start date">
+              </div>
+              <div class="form-group" style="float: left">
+                <label class="sr-only" for="enddateNum">-----</label>
+                <input type="date" class="form-control" id="enddateNum" placeholder="Choose end date">
+              </div>
+              <button id="searchdateNum" class="btn btn-default" style="margin-left: 4px">Search</button>
+            </div>
+          </div>
+          <div id="myfirstchart" style="width: 850px"></div>
+        </div>
+        <div class="tab-pane " id="hero-ar">
+          <div>
+            <div class="form-inline">
+              <div class="form-group" style="float: left">
+                <label class="sr-only" for="startdateOsTy"></label>
+                <input type="date" class="form-control" id="startdateOsTy" placeholder="Choose start date">
+              </div>
+              <div class="form-group" style="float: left">
+                <label class="sr-only" for="enddateOsTy">-----</label>
+                <input type="date" class="form-control" id="enddateOsTy" placeholder="Choose end date">
+              </div>
+              <button id="searchdateOsType" class="btn btn-default" style="margin-left: 4px">Search</button>
+            </div>
+          </div>
+          <div id="hero-area" style="width: 850px;"></div>
+        </div>
+        <div class="tab-pane " id="hero-ba">
+          <div>
+            <div class="form-inline">
+              <div class="form-group" style="float: left">
+                <label class="sr-only" for="startdateAppTy"></label>
+                <input type="date" class="form-control" id="startdateAppTy" placeholder="Choose start date">
+              </div>
+              <div class="form-group" style="float: left">
+                <label class="sr-only" for="enddateAppTy">-----</label>
+                <input type="date" class="form-control" id="enddateAppTy" placeholder="Choose end date">
+              </div>
+              <button id="searchdateAppTy" class="btn btn-default" style="margin-left: 4px">Search</button>
+            </div>
+          </div>
+          <div id="hero-bar" style="width: 850px;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  var tmpLine     = [
+    { day: '2013-12-1', value: 5 },
+    { day: '2013-12-2', value: 5 },
+    { day: '2013-12-3', value: 10 },
+    { day: '2013-12-4', value: 15 },
+    { day: '2013-12-5', value: 20 }
+  ]
+  function reloadNum(){
+    var line = new Morris.Line({
+      element: 'myfirstchart',
+      data: tmpLine,
+      xkey: 'day',
+      ykeys: ['value'],
+      labels: ['Value']
+    });
+  }
+  $(document).ready(function() {
+    new Morris.Line({
+      element: 'myfirstchart',
+      data: tmpLine,
+      xkey: 'day',
+      ykeys: ['value'],
+      labels: ['Value']
+    });
+  });
+
+</script>
+<script>
+  var tmpArea = [
+    {period: '2013-10-01', IOS: 2666, Andriod: null, Win: 2647},
+    {period: '2013-10-02', IOS: 2778, Andriod: 2294, Win: 2441},
+    {period: '2013-10-03', IOS: 4912, Andriod: 1969, Win: 2501},
+    {period: '2013-10-04', IOS: 3767, Andriod: 3597, Win: 5689},
+    {period: '2013-10-05', IOS: 6810, Andriod: 1914, Win: 2293},
+    {period: '2013-10-06', IOS: 5670, Andriod: 4293, Win: 1881},
+    {period: '2013-10-07', IOS: 4820, Andriod: 3795, Win: 1588},
+    {period: '2013-10-08', IOS: 15073, Andriod: 5967, Win: 5175},
+    {period: '2013-10-09', IOS: 10687, Andriod: 4460, Win: 2028},
+    {period: '2013-10-10', IOS: 8432, Andriod: 5713, Win: 1791}
+  ];
+  var tmpBar = [
+    {type: '贩卖', geekbench: 136},
+    {type: '制造', geekbench: 137},
+    {type: '政府', geekbench: 275},
+    {type: '金融', geekbench: 380},
+    {type: '运输', geekbench: 655},
+    {type: '服务', geekbench: 1571},
+    {type: '通信', geekbench: 650},
+    {type: '电器', geekbench: 800},
+    {type: '教育', geekbench: 780},
+    {type: '其他', geekbench: 250}
+  ];
+  function reloadOsTy(){
+    setTimeout(function(){
+      new Morris.Area({
+        element: 'hero-area',
+        data:tmpArea,
+        xkey: 'period',
+        ykeys: ['IOS', 'Andriod', 'Win'],
+        labels: ['IOS', 'Andriod', 'Windows'],
+        pointSize: 2,
+        hideHover: 'auto'
+      });
+    } ,50);
+    $("#hero-area").empty();
+
+  }
+  function reloadAppTy(){
+    setTimeout(function(){
+      new Morris.Bar({
+        element: 'hero-bar',
+        data: tmpBar,
+        xkey: 'type',
+        ykeys: ['geekbench'],
+        labels: ['Geekbench'],
+        barRatio: 0.4,
+        xLabelAngle: 35,
+        hideHover: 'auto'
+      });
+    } ,50);
+    $("#hero-bar").empty();
+
+  }
+</script>
+<% include common/foot.html %>

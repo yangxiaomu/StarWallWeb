@@ -1,0 +1,172 @@
+<% include common/head.html %>
+<!-- 加载模板 -->
+<% include common/app_detail.html %>
+<% include common/template_carousel.html %>
+
+  <% include common/sidebar.html %>
+
+<script type="text/javascript" src="/javascripts/app_check_list.js"></script>
+
+<div class="span9">
+  <section id="thumbnails">
+	  <!-- 进行判定，如果title == “app_list”则不显示“上传新应用按钮”，其他情况显示 -->
+	  <% if(title == "upload_list") { %>
+    <div>
+	    <div style="float:right; margin-right: 10%">
+		    <a href="/app/add/step1">
+			    <button type="button" class="btn btn-small btn-primary">
+				    <span class="icon-plus"></span>
+				    <span class="sr-only">上传新应用</span>
+			    </button>
+		    </a>
+	    </div>
+	    <h3 class="page-header" id ="app_view_title" style="width: auto;"> アップロード一覧</h3>
+	    </div>
+	  <% } %>
+	  <% if(title == "manage_list") { %>
+      <h3 class="page-header" id ="app_view_title" style="width: auto;">APP管理</h3>
+	  <% } %>
+	  <% if(title == "app_list") { %>
+	    <h3 class="page-header" id ="app_view_title" style="width: auto;">ダウンロード一覧</h3>
+	  <% } %>
+	  <% if(title == "title_new_list") { %>
+	  <h3 class="page-header" id ="app_view_title" style="width: auto;">新着</h3>
+	  <% } %>
+	  <% if(title == "title_download_list") { %>
+	  <h3 class="page-header" id ="app_view_title" style="width: auto;">おすすめ</h3>
+	  <% } %>
+	  <% if(title == "title_rank_list") { %>
+	  <h3 class="page-header" id ="app_view_title" style="width: auto;">ランキング</h3>
+	  <% } %>
+    <div id="check_list_container" style="padding:5px; background:#ffffff;width:800px">
+    </div><!--well-->
+    <% include common/template_detail_list.html %>
+  </section>
+  <br><br>
+</div>
+
+
+<script type="text/javascript">
+	var app_view_string = "";
+  var condition       = "";
+	var list            = DetailList.create();
+	var is_loading      = false;
+
+  if("<%= title %>" == "app_list"){  //ダウンロード一覧
+	  app_view_string = "ダウンロード一覧";
+	  condition = "status=2";
+	  $(document).ready(function() {
+		  list.init($("#check_list_container"), {
+			  id_prex :  "dl_list"
+			  ,str    : {"loading": "Loading........"}
+			  ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+			  ,url    : "/app/list.json?admin=1&sort=downloadCount&asc=0&"+condition
+		  });
+
+		  // 初始化加载数据
+		  list.load();
+		  is_loading = true;
+	  });
+  } else if("<%= title %>" == "upload_list") {  //アップロード一覧
+	  app_view_string = " アップロード一覧";
+    condition = "createBy="+smart.uid();
+	  $(document).ready(function() {
+		  list.init($("#check_list_container"), {
+			  id_prex :  "dl_list"
+			  ,str    : {"loading": "Loading........"}
+			  ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+			  ,url    : "/app/list.json?admin=1&sort=status&asc=1&"+condition
+		  });
+
+		  // 初始化加载数据
+		  list.load();
+		  is_loading = true;
+	  });
+  } else if("<%= title %>" == "manage_list") {  //APP管理一览
+	  app_view_string = "APP管理一览";
+    condition = "";
+	  $(document).ready(function() {
+		  list.init($("#check_list_container"), {
+			  id_prex :  "dl_list"
+			  ,str    : {"loading": "Loading........"}
+			  ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+			  ,url    : "/app/list.json?admin=1&sort=status&asc=1&"+condition
+		  });
+
+		  // 初始化加载数据
+		  list.load();
+		  is_loading = true;
+	  });
+  } else if("<%= title %>" == "title_new_list") { //新着一览
+	  app_view_string = "新着";
+	  condition = "status=2";
+	  $(document).ready(function() {
+		  list.init($("#check_list_container"), {
+			  id_prex :  "dl_list"
+			  ,str    : {"loading": "Loading........"}
+			  ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+			  ,url    : "/app/list.json?admin=1&sort=updateAt&asc=0&"+condition
+		  });
+
+		  // 初始化加载数据
+		  list.load();
+		  is_loading = true;
+	  });
+  } else if("<%= title %>" == "title_download_list") {  //おすすめ一览
+	  app_view_string = "おすすめ";
+	  condition = "status=2";
+	  $(document).ready(function() {
+		  list.init($("#check_list_container"), {
+			  id_prex :  "dl_list"
+			  ,str    : {"loading": "Loading........"}
+			  ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+			  ,url    : "/app/list.json?admin=1&sort=downloadCount&asc=0&"+condition
+		  });
+
+		  // 初始化加载数据
+		  list.load();
+		  is_loading = true;
+	  });
+  } else if("<%= title %>" == "title_rank_list") {  //ランキング一览
+	  app_view_string = "ランキング";
+	  condition = "status=2";
+	  $(document).ready(function() {
+		  list.init($("#check_list_container"), {
+			  id_prex :  "dl_list"
+			  ,str    : {"loading": "Loading........"}
+			  ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+			  ,url    : "/app/list.json?admin=1&sort=rank&asc=0&"+condition
+		  });
+
+		  // 初始化加载数据
+		  list.load();
+		  is_loading = true;
+	  });
+  }
+
+//  $(document).ready(function() {
+//    list.init($("#check_list_container"), {
+//      id_prex :  "dl_list"
+//      ,str    : {"loading": "Loading........"}
+//      ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+//      ,url    : "/app/list.json?admin=1&sort=name&asc=1&"+condition
+//    });
+//
+//    // 初始化加载数据
+//    list.load();
+//	  is_loading = true;
+//  });
+
+  function filterCategory(code, name) {
+	  if(is_loading == false || !code || !name){
+		  return;
+	  }
+	  // 设置检索title
+	  $('#app_view_title').html(_.escape(app_view_string + '(分类"' + name + '")' ));
+	  list.category = code;
+	  list.category_name = name;
+	  list.load();
+  }
+</script>
+
+<% include common/foot.html %>

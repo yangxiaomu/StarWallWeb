@@ -1,0 +1,19 @@
+{
+  "name": "starwall",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+      "smartcore": "0.1.30"
+    , "socket.io": "*"
+    , "socket.io-client": "*"
+    , "eventproxy": "0.2.2"
+  },
+  "devDependencies": {
+      "less": "1.5.0"
+    , "csv": "0.3.6"
+    , "should": "2.0.2"
+  }
+}

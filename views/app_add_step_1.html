@@ -1,0 +1,180 @@
+<% include common/head.html %>
+
+<script type="text/javascript" src="/javascripts/app_add_step_1.js"></script>
+<script src="/javascripts/sw/sw.app.js"></script>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#myCarousel').carousel({
+      interval: 10000
+    })
+
+    $("[rel='tooltip']").tooltip();
+
+    $('#item1').hover(
+      function () {
+        $(this).find('.desc').slideDown(250); //.fadeIn(250)
+      },
+      function () {
+        $(this).find('.desc').slideUp(250); //.fadeOut(205)
+      }
+    );
+  });
+</script>
+<br>
+<br>
+<div class="container-fluid top_line">
+  <div class="row-fluid">
+    <div class="span3">
+      <% include common/app_add_sidebar.html %>
+    </div>
+    <div class="span9 span10_left_line">
+      <form class="required-validate form-horizontal" action="/app/create/step1.json" method="post" onsubmit="return validateCallback(this,didSendStep1Callback,didSendFn,'确认提交吗？')">
+        <input type="hidden" name="appId" id="appId" value="<%=appId%>">
+        <% if (appId != '0') { %>
+        <input type="hidden" name="_id" value=""/>
+        <%}%>
+        <div class="widget-box">
+          <div class="widget-content nopadding">
+            <div class="control-group">
+              <label class="control-label">系统OS</label>
+              <div class="controls row-fluid">
+                <div class="btn-group" id="appType">
+                  <button type="button" class="btn btn-default" value="10001" style="width: 90px">IOS</button>
+                  <button type="button" class="btn btn-default" value="10002" style="width: 90px">Android</button>
+                  <button type="button" class="btn btn-default" value="10003" style="width: 90px">Web</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">名称</label>
+              <div class="controls">
+                <input class="required" type="text" name="name" id="name" placeholder="例：捕鱼达人">
+              </div>
+            </div>
+            <!--新加数据项-->
+            <div class="control-group">
+              <label class="control-label">版权</label>
+              <div class="controls">
+                <input class="required" type="text" name="copyright" id="copyright" placeholder="例：触控科技">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">说明</label>
+              <div class="controls">
+                <textarea class="required" name="description" id="description" placeholde = "应用介绍以及使用方法 " style="width: 270px;height: 120px"></textarea>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">类别</label>
+              <div class="controls">
+                <select name="category" multiple="multiple" style="height: 120px">
+                  <% if(categoryTypes && categoryTypes.items) { %>
+                  <% categoryTypes.items.forEach(function(c) { %>
+                  <option value="<%= c.code %>"><%= c.name %></option>
+                  <% }); %>
+                  <% } %>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">版本</label>
+              <div class="controls">
+                <input class="required" type="text" name="version" id="version" placeholder="例：1.5.2">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">更新说明</label>
+              <div class="controls">
+                <textarea class="required" name="releaseNote" id="releaseNote" placeholder = "更新信息说明" style="width: 270px;height: 100px"></textarea>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">OS版本</label>
+              <div class="controls">
+                <input class="required" type="text" name="requireOs" id="requireOs" placeholder="最低要求系统">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">设备要求</label>
+              <div class="controls">
+                <input class="required" type="text" name="requireDevice" id="requireDevice" placeholder="最低设备要求">
+              </div>
+            </div>
+
+            <div class="control-group" id="bundleId">
+              <label class="control-label">bundleIdentifier</label>
+              <div class="controls">
+                <input class="required" type="text" name="bundleIdentifier" id="bundleIdentifier" placeholder="IOS应用必须">
+              </div>
+            </div>
+            <div class="control-group" id="bundleVer">
+              <label class="control-label">bundleVersion</label>
+              <div class="controls">
+                <input class="required" type="text" name="bundleVersion" id="bundleVersion" placeholder="IOS应用必须">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">公开对象</label>
+              <div class="controls">
+                <input type="hidden" name="permission.download" id="permissionDownloadInput"/>
+                <div class="user_select_print" style="width: 203px">
+                  <ul id="download_user_selected">
+                    <li>公开对象</li>
+                  </ul>
+                </div>
+                <div style="margin-left: 15px" id="download_set_btn" action="/user/list.json"
+                     data="{ }"
+                     for="required"
+                     generated="true"
+                     class="help-inline setUserList" href="#document-selector" data-toggle="modal">
+                  <button class='btn'>設定</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label"></label>
+              <div class="controls">
+                <button class="btn btn-small btn-success" type="submit">
+                  下一步
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="document-selector" role="dialog" aria-hidden="true" style="display:none;height:400px">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>选择用户</h3>
+  </div>
+  <div class="modal-body" style="">
+    <fieldset style="height:300px;overflow: scroll;">
+      <table class="table table-hover" style="height:300px;overflow: scroll;">
+        <thead>
+        <tr>
+          <th>id</th>
+          <th>姓名</th>
+        </tr>
+        </thead>
+        <tbody id="setuserlist" target="ajaxGet" action="/user/list.json" callback="$app.didUserListRender" render="" style="height:300px;overflow: scroll;">
+        </tbody>
+      </table>
+    </fieldset>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" id="setUser">确定</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+  </div>
+</div>
+
+<% include common/foot.html %>

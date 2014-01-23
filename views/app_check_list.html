@@ -1,0 +1,150 @@
+<% include common/head.html %>
+<!-- 加载模板 -->
+<% include common/app_detail.html %>
+<% include common/template_carousel.html %>
+
+<script type="text/javascript" src="/javascripts/app_check_list.js"></script>
+
+<div class="sidebar">
+  <ul class="col-nav span9 app_add" style="margin-top: 25px">
+    <li><a id="checking" href="#" onclick="checking()">待审核一览<i class="icon-ok-circle" style="display: none"></i></a></li>
+    <li><a id="passed" href="#" onclick="passed()">已通过一览<i class="icon-ok-circle" style="display: none"></i></a></li>
+    <li><a id="rejected" href="#" onclick="rejected()">未通过一览<i class="icon-ok-circle" style="display: none"></i></a></li>
+    <li><a id="unvaild" href="#" onclick="unvalid()">无效一览<i class="icon-ok-circle" style="display: none"></i></a></li>
+  </ul>
+</div>
+
+<div class="span9">
+  <section id="thumbnails">
+    <div class="breadcrumb breadcrumb-ext">
+      <h4 id="check_app_list">Checking List</h4>
+    </div>
+    <div id="check_list_container" style="padding:5px; background:#ffffff;width:800px">
+    </div><!--well-->
+    <% include common/template_detail_list.html %>
+  </section>
+  <br><br>
+</div>
+
+
+<div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header" style="height: 65px;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>确认审核通过 </h3>
+      </div>
+      <div class="modal-body" style="overflow-y: hidden" >
+        <div ><button id="confirmApply" class="btn btn-default btn-success"style="margin-left: 35%"><i class="icon-exclamation-sign icon-large"></i>&nbsp &nbsp Confirm Apply</button></div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header" style="height: 65px;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>确认审核拒绝 </h3>
+      </div>
+      <div class="modal-body" style="overflow-y: hidden" >
+        <form role="form">
+          <div class="form-group">
+            <label for="rejectReason">Reject Reason</label>
+            <textarea  class="form-control" id="rejectReason" placeholder="Enter Reason" rows="5" style="width: 510px;"> </textarea>
+          </div>
+          <div class="control-group">
+            <label class="control-label">キャプチャー</label>
+            <div class="controls">
+              <img id="image_big_img" style="display:none;width:50px;height:50px;" src=""/>
+              <input type="hidden" id="image_big_file_hid" name="screenshot"/>
+              <input type="file" id="image_big_file" style="display: none" accept="image/*">
+              <button id="image_big_btn" class="btn" onclick="return false;">アップロード</button>
+              <span id="image_big_span" for="required" generated="true" class="help-inline"style="">キャプチャーをアップロード</span>
+            </div>
+          </div>
+          <div ><button id="confirmReject" class="btn btn-default btn-success"><i class="icon-exclamation-sign icon-small"></i>&nbsp &nbsp Confirm Reject</button></div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+  var list = DetailList.create();
+  $(document).ready(function() {
+    list.init($("#check_list_container"), {
+      id_prex :  "dl_list"
+      ,str    : {"loading": "Loading........"}
+      ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+      ,url    : "/app/list.json?admin=1&sort=updateAt&asc=0&status=1"
+    });
+
+    // 初始化加载数据
+    list.load();
+  });
+
+  function checking(){
+    $("#check_list_container").empty();
+    $(document).ready(function() {
+      list.init($("#check_list_container"), {
+        id_prex :  "dl_list"
+        ,str    : {"loading": "Loading........"}
+        ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+        ,url    : "/app/list.json?admin=1&sort=updateAt&asc=0&status=1"
+      });
+
+      // 初始化加载数据
+      list.load();
+    });
+  }
+
+  function passed(){
+    $("#check_list_container").empty();
+    $(document).ready(function() {
+      list.init($("#check_list_container"), {
+        id_prex :  "dl_list"
+        ,str    : {"loading": "Loading........"}
+        ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+        ,url    : "/app/list.json?admin=1&sort=updateAt&asc=0&status=2"
+      });
+
+      // 初始化加载数据
+      list.load();
+    });
+  }
+
+  function rejected(){
+    $("#check_list_container").empty();
+    $(document).ready(function() {
+      list.init($("#check_list_container"), {
+        id_prex :  "dl_list"
+        ,str    : {"loading": "Loading........"}
+        ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+        ,url    : "/app/list.json?admin=1&sort=updateAt&asc=0&status=3"
+      });
+
+      // 初始化加载数据
+      list.load();
+    });
+  }
+
+  function unvalid(){
+    $("#check_list_container").empty();
+    $(document).ready(function() {
+      list.init($("#check_list_container"), {
+        id_prex :  "dl_list"
+        ,str    : {"loading": "Loading........"}
+        ,cols   : [ "icon", "info", "os", "require", "status", "update_info", "option"]
+        ,url    : "/app/list.json?admin=1&sort=updateAt&asc=0&status=4"
+      });
+
+      // 初始化加载数据
+      list.load();
+    });
+  }
+</script>
+
+<% include common/foot.html %>

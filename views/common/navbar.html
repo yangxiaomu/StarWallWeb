@@ -1,0 +1,182 @@
+<script type='text/javascript' src='/javascripts/searcher.model.js'></script>
+<script type='text/javascript' src='/javascripts/searcher.view.js'></script>
+
+<input type="hidden" id="bright" name="bright" value="" />
+<input type="hidden" id="userid" name="userid" value="<%= user._id %>" />
+<input type="hidden" id="timezone" name="timezone" value="" />
+<div id="_navbar" style="height: 41px;">
+  <nav>
+    <ul id="_group0" rel="sam">
+      <li style="background: -webkit-linear-gradient(top, #ffffff, #f2f2f2);">
+        <a id="starwall" href="/starwall" style="line-height: 37px;font-size: 18px;">
+          <img src="/images/starwall.jpg" style="height: 38px; width: 38px;">
+          <i class="icon-home icon-small"></i>StarWall
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <nav id="sara">
+    <ul id="_group1" rel="sam">
+      <li style="width: 60px;">
+        <a id="app" href="/starwall"><i class="icon-star icon-large"></i></a>
+        <ul id="app_menu" class="pull-left">
+          <div id="app_div" class="popover bottom" style="min-width: 120px;display: block;margin-top: 0px;">
+            <div class="arrow" style="left: 6%;top: -10px;margin-left: 15px;"></div>
+            <li><a href="/app/list">&nbsp;ダウンロード一覧</a></li>
+            <li><a href="/app/upload/list">&nbsp;アップロード一覧</a></li>
+            <li><a href="/app/add/step1">&nbsp;APPアップロード</a></li>
+            <li><a href="/app/check/list">&nbsp;APP承認</a></li>
+            <li><a href="/app/manage/list">&nbsp;APP管理</a></li>
+          </div>
+        </ul>
+      </li>
+      <li style="width: 60px;">
+        <a id="admin" href="/starwall"><i class="icon-group icon-large"></i></a>
+        <ul id="admin_menu" class="pull-left">
+          <div class="popover bottom" style="min-width: 120px;display: block;margin-top: 0px;">
+            <div class="arrow" style="left: 6%;top: -10px;margin-left: 15px;"></div>
+            <li><a href="/starwall">&nbsp;ユーザ</a></li>
+            <li><a href="/starwall">&nbsp;組織・グループ</a></li>
+            <li><a href="/starwall">&nbsp;顧客</a></li>
+          </div>
+        </ul>
+      </li>
+      <li style="width: 60px;">
+        <a id="data" href="/starwall"><i class="icon-signal icon-large"></i></a>
+        <ul id="data_menu" class="pull-left">
+          <div class="popover bottom" style="min-width: 120px;display: block;margin-top: 0px;">
+            <div class="arrow" style="left: 6%;top: -10px;margin-left: 15px;"></div>
+            <li><a href="/app/analyze">&nbsp;APP分析</a></li>
+            <li><a href="/starwall">&nbsp;ユーザ分析</a></li>
+          </div>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <nav id="_search">
+    <input id="search" value="" x-webkit-speech /><div></div>
+  </nav>
+  <nav>
+    <ul class="nav" style="float: right;" rel="sam">
+      <li style="width: 60px;">
+        <a id="login" href="/usereditor"><img src="<%= user.photo ? '/picture/' + user.photo.big : '/images/user.png' %>" style="height: 20px;width: 20px;"></a>
+      </li>
+      <li style="width: 60px;">
+        <a id="_logout" href="/simplelogout"><i class="icon-signout icon-large"></i></a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<script type="text/javascript">
+  var pop_win;
+  var timer ;
+
+  function events(){
+
+    $("#_navbar").bind("mouseleave", function(){
+      if (pop_win) {
+        timer = setTimeout("pop_win.hide();", 500);
+      }
+    });
+
+    $("#app").bind("mouseenter", function(){
+      if (pop_win) {
+        pop_win.hide();
+      }
+      $("#app_menu").show();
+      pop_win = $("#app_menu");
+    });
+    $("#admin").bind("mouseenter", function(){
+      if (pop_win) {
+        pop_win.hide();
+      }
+      $("#admin_menu").show();
+      pop_win = $("#admin_menu");
+    });
+    $("#data").bind("mouseenter", function(){
+      if (pop_win) {
+        pop_win.hide();
+      }
+      $("#data_menu").show();
+      pop_win = $("#data_menu");
+    });
+
+    $("#app_menu").bind("mouseenter", function(){
+      if (timer) { clearTimeout(timer);}
+    });
+    $("#admin_menu").bind("mouseenter", function(){
+      if (timer) { clearTimeout(timer);}
+    });
+    $("#data_menu").bind("mouseenter", function(){
+      if (timer) { clearTimeout(timer);}
+    });
+  }
+  events();
+</script>
+
+
+<div id="_searchresult" class="bucketed">
+  <ul class="search">
+    <li class="bottom"><i class="icon-search"></i> </li>
+  </ul>
+</div>
+
+<div id="_findresult" style="z-index: 100000000000000000000000; ">
+  <ul class="search">
+    <li class="bottom"><i class="icon-search"></i> </li>
+  </ul>
+</div>
+
+<!-- 全文检索框 -->
+<script type="text/template" id="_searchresult-user-template">
+  <li class="user">
+    <div class="left">
+      <a href="/user/{{ id }}">
+        <img src="{{ photo }}" />
+        <span>{{ name }}</span>
+        <span class="addition">{{ addition }}</span>
+      </a>
+    </div>
+    <div class="right">
+      <a uid="{{ id }}" class="operation btn btn-small btn-info" href="#"> </a>
+    </div>
+  </li>
+</script>
+<script type="text/template" id="_searchresult-group-template">
+  <li class="user">
+    <div class="left">
+      <a href="/group/{{ id }}">
+        <img src="{{ photo }}" />
+        <span>{{ name }}</span>
+        <span class="addition">{{ addition }}</span>
+      </a>
+    </div>
+    <div class="right hidden">
+      <a gid="{{ id }}" class="operation btn btn-small btn-info" href="#"> </a>
+    </div>
+  </li>
+</script>
+<script type="text/template" id="_searchresult-file-template">
+  <li class="user">
+    <div class="left">
+      <a href="/file/{{ id }}">
+        <img src="{{ photo }}" />
+        <span>{{ name }}</span>
+        <span class="addition">{{ addition }}</span>
+      </a>
+    </div>
+    <div class="right hidden">
+      <a fid="{{ id }}" class="operation btn btn-small btn-info" href="#">            </a>
+    </div>
+  </li>
+</script>
+<script type="text/template" id="_searchresult-header-template">
+  <li class="header">{{ type }}</li>
+</script>
+<script type="text/template" id="_searchresult-bottom-template">
+  <li class="bottom">
+    <a href="/list/search?keywords={{ keywords }}"><i class="icon-search"></i> </a>
+  </li>
+</script>
+
