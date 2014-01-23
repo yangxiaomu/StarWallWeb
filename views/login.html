@@ -36,7 +36,7 @@
     <div class="triangle-r"></div>
 
     <form id="loginform" method="post" action="/login" style="align-content: center;">
-      <input type="hidden" id="_csrf" name="_csrf" value="<%= csrftoken %>" />
+      <input type="hidden" id="_csrf" name="_csrf" value="<%= csrftoken %>" style="width: 100%"/>
       <input type="hidden" name="_method" value="post" />
       <p id="detail">
         <input type="text" id="name" name="name" value="admin" placeholder="UserID" />
